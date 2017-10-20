@@ -1,15 +1,21 @@
-# Read in the data
-data <- read.table("data.txt", header = TRUE, sep = ";")
+## Need the sqldf package to subset only the needed data
+require(sqldf)
 
-# Prepare the data
-dates <- data[,1]
-data[,1] <- as.Date(data[,1], format="%d/%m/%Y")
+## USe the read.csv.sql withe the correct query to get only the data for the 1/2/2007 and 2/2/2007 dates
+data <- read.csv.sql( file='./household_power_consumption.txt',
+                     sep=";",
+                     sql="select * from file where Date = '1/2/2007' or Date = '2/2/2007'",
+                     header=TRUE)
 
-# Open the device
-png(filename = "plot1.png", width = 480, height = 480, units = "px", pointsize = 12)
+# Set the device to display 1 graphs
+par(mfrow = c(1, 1))
 
-# Plot the graph
-hist(data[,3], col="red", main = "Global Active Power", xlab = "Global Active Power (kilowatts)")
+## Build the histogram
+hist(data$Global_active_power, main="Global Active Power", xlab="Global Active Power (kilowatts)", col="red")
 
-# Close the device
+## Copy the hystogram to the file plot1.png. By default the width and the height of the png file are 480 px
+dev.copy(png, file="./plot1.png")
+
+## Close the PNG device
 dev.off()
+

@@ -1,0 +1,18 @@
+## Need the sqldf package to subset only the needed data
+require(sqldf)
+
+## USe the read.csv.sql withe the correct query to get only the data for the 1/2/2007 and 2/2/2007 dates
+epc <- read.csv.sql( file='./household_power_consumption.txt',
+                      sep=";",
+                      sql="select * from file where Date = '1/2/2007' or Date = '2/2/2007'",
+                      header=TRUE)
+
+## Build the histogram
+hist(epc$Global_active_power,main="Global Active Power",xlab="Global Active Power (kilowatts)",col="red")
+
+## Copy the hystogram to the file plot1.png. By default the width and the height of the png file are 480 px
+dev.copy(png,file="./plot1.png")
+
+## Close the PNG device
+dev.off()
+
